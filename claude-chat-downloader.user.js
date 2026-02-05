@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Claude Chat Downloader
 // @namespace    https://claude.ai
-// @version      1.0
+// @version      1.0.2
 // @license      MIT
 // @description  Download Claude conversations as self-contained HTML files
 // @match        https://claude.ai/*
