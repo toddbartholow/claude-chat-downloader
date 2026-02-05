@@ -2,6 +2,7 @@
 // @name         Claude Chat Downloader
 // @namespace    https://claude.ai
 // @version      1.0
+// @license      MIT
 // @description  Download Claude conversations as self-contained HTML files
 // @match        https://claude.ai/*
 // @grant        none
@@ -738,9 +739,6 @@ ${getCSS()}
   </div>
 </header>
 <div id="minimap" class="minimap">
-  <div class="minimap-header">   
-    <button id="minimap-close" title="Close minimap">&times;</button>
-  </div>
   <div class="minimap-track" id="minimap-track">
     <div class="minimap-viewport" id="minimap-viewport"></div>
   </div>
@@ -1079,16 +1077,6 @@ body {
   display: none; flex-direction: column; overflow: hidden;
 }
 .minimap.visible { display: flex; }
-.minimap-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 6px 10px; font-size: 11px; font-weight: 600; color: var(--text-muted);
-  border-bottom: 1px solid var(--border);
-}
-.minimap-header button {
-  background: none; border: none; cursor: pointer; color: var(--text-muted);
-  font-size: 16px; line-height: 1; padding: 0;
-}
-.minimap-header button:hover { color: var(--text-primary); }
 .minimap-track {
   flex: 1; overflow: hidden; position: relative; cursor: pointer;
   padding: 4px 8px;
@@ -1172,7 +1160,6 @@ body {
     const track = document.getElementById('minimap-track');
     const viewport = document.getElementById('minimap-viewport');
     const toggleBtn = document.getElementById('minimap-toggle');
-    const closeBtn = document.getElementById('minimap-close');
 
     // Build minimap blocks from messages
     const messages = document.querySelectorAll('.message');
@@ -1283,9 +1270,6 @@ body {
     toggleBtn.addEventListener('click', () => {
       minimap.classList.toggle('visible');
       updateViewport();
-    });
-    closeBtn.addEventListener('click', () => {
-      minimap.classList.remove('visible');
     });
   })();
 
