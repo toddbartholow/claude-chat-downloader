@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lorem ipsum origins and history</title>
+<style>
+
+:root {
+  --bg-primary: #f5f4ef;
+  --bg-secondary: #eae8e1;
+  --bg-message-human: #e8e5db;
+  --bg-message-assistant: transparent;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b6560;
+  --text-muted: #9a948e;
+  --accent: #c96442;
+  --accent-light: rgba(201,100,66,0.1);
+  --border: #d8d4cc;
+  --code-bg: #2b2926;
+  --code-text: #e8e4da;
+  --thinking-bg: #edeadf;
+  --thinking-border: #d4d0c5;
+  --tool-bg: #f0ede4;
+  --tool-border: #d8d4cc;
+  --artifact-bg: #faf9f5;
+  --artifact-border: #c9c4ba;
+  --search-card-bg: #fff;
+  --search-card-border: #e0ddd5;
+  --header-bg: #f5f4ef;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --radius: 8px;
+  --radius-sm: 4px;
+}
+[data-theme="dark"] {
+  --bg-primary: #1a1916;
+  --bg-secondary: #232220;
+  --bg-message-human: #2a2824;
+  --bg-message-assistant: transparent;
+  --text-primary: #e8e4da;
+  --text-secondary: #a09890;
+  --text-muted: #706860;
+  --accent: #d4805e;
+  --accent-light: rgba(212,128,94,0.1);
+  --border: #3a3632;
+  --code-bg: #111110;
+  --code-text: #d4d0c5;
+  --thinking-bg: #222120;
+  --thinking-border: #3a3632;
+  --tool-bg: #252320;
+  --tool-border: #3a3632;
+  --artifact-bg: #1e1d1a;
+  --artifact-border: #3a3632;
+  --search-card-bg: #252320;
+  --search-card-border: #3a3632;
+  --header-bg: #1a1916;
+  --shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 15px;
+}
+.page-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  backdrop-filter: blur(8px);
+}
+.header-left { display: flex; align-items: center; gap: 12px; }
+.claude-logo-header { color: var(--accent); display: flex; align-items: center; }
+.header-title h1 { font-size: 16px; font-weight: 600; }
+.header-meta { font-size: 12px; color: var(--text-muted); }
+.header-actions { display: flex; gap: 8px; }
+.header-actions button {
+  background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 6px 8px; cursor: pointer; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+}
+.header-actions button:hover { background: var(--bg-secondary); color: var(--text-primary); }
+.conversation { max-width: 48rem; margin: 0 auto; padding: 24px 16px 80px; }
+.message { display: flex; gap: 16px; padding: 24px 0; }
+.message + .message { border-top: 1px solid var(--border); }
+.message-avatar {
+  width: 28px; height: 28px; min-width: 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; margin-top: 2px;
+}
+.human-avatar { background: var(--bg-message-human); color: var(--text-primary); border: 1px solid var(--border); }
+.assistant-avatar { background: var(--accent-light); color: var(--accent); }
+.message-body { flex: 1; min-width: 0; }
+.message-sender { font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+.message-content { overflow-wrap: break-word; }
+.message-content p { margin-bottom: 0.75em; }
+.message-content p:last-child { margin-bottom: 0; }
+.message-content h1 { font-size: 1.5em; font-weight: 700; margin: 1em 0 0.5em; }
+.message-content h2 { font-size: 1.3em; font-weight: 700; margin: 1em 0 0.5em; }
+.message-content h3 { font-size: 1.1em; font-weight: 600; margin: 0.8em 0 0.4em; }
+.message-content h4, .message-content h5, .message-content h6 { font-size: 1em; font-weight: 600; margin: 0.6em 0 0.3em; }
+.message-content ul, .message-content ol { padding-left: 1.5em; margin-bottom: 0.75em; }
+.message-content li { margin-bottom: 0.25em; }
+.message-content blockquote {
+  border-left: 3px solid var(--accent);
+  padding: 0.5em 1em; margin: 0.75em 0;
+  color: var(--text-secondary); background: var(--thinking-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.message-content table { border-collapse: collapse; margin: 0.75em 0; width: 100%; }
+.message-content th, .message-content td {
+  border: 1px solid var(--border); padding: 8px 12px; text-align: left;
+}
+.message-content th { background: var(--bg-secondary); font-weight: 600; }
+.message-content hr { border: none; border-top: 1px solid var(--border); margin: 1em 0; }
+.message-content a { color: var(--accent); text-decoration: none; }
+.message-content a:hover { text-decoration: underline; }
+.inline-code {
+  background: var(--bg-secondary); padding: 2px 6px; border-radius: 3px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace; font-size: 0.9em;
+}
+.code-block {
+  background: var(--code-bg); color: var(--code-text);
+  border-radius: var(--radius); padding: 16px; margin: 0.75em 0;
+  overflow-x: auto; font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 13px; line-height: 1.5; position: relative;
+}
+.code-block code { background: none; padding: 0; }
+.code-block .copy-btn {
+  position: absolute; top: 8px; right: 8px;
+  background: rgba(255,255,255,0.1); border: none; border-radius: var(--radius-sm);
+  padding: 4px 8px; cursor: pointer; color: var(--code-text); font-size: 11px;
+  opacity: 0; transition: opacity 0.15s;
+}
+.code-block:hover .copy-btn { opacity: 1; }
+.code-block .copy-btn:hover { background: rgba(255,255,255,0.2); }
+.hl-keyword { color: #c678dd; }
+.hl-string { color: #98c379; }
+.hl-comment { color: #5c6370; font-style: italic; }
+.hl-number { color: #d19a66; }
+.thinking-block {
+  background: var(--thinking-bg); border: 1px solid var(--thinking-border);
+  border-radius: var(--radius); margin: 0.75em 0; overflow: hidden;
+}
+.thinking-block summary {
+  padding: 10px 16px; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text-secondary); font-weight: 500;
+}
+.thinking-block summary:hover { background: var(--bg-secondary); }
+.thinking-icon { display: flex; align-items: center; color: var(--accent); }
+.thinking-content { padding: 0 16px 16px; font-size: 14px; color: var(--text-secondary); }
+.thinking-content p { margin-bottom: 0.5em; }
+.redacted-thinking {
+  background: var(--thinking-bg); border: 1px solid var(--thinking-border);
+  border-radius: var(--radius); padding: 10px 16px; margin: 0.75em 0;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text-muted);
+}
+.tool-block {
+  border: 1px solid var(--tool-border); border-radius: var(--radius);
+  margin: 0.75em 0; overflow: hidden;
+}
+.tool-header {
+  padding: 10px 16px; background: var(--tool-bg);
+  display: flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 500; color: var(--text-secondary);
+}
+.tool-input-details summary { padding: 8px 16px; cursor: pointer; font-size: 13px; color: var(--text-muted); }
+.tool-input { margin: 0; padding: 12px 16px; background: var(--code-bg); color: var(--code-text); font-size: 12px; overflow-x: auto; }
+.tool-result { padding: 12px 16px; font-size: 14px; border-top: 1px solid var(--tool-border); }
+.tool-error { color: #e05252; background: rgba(224,82,82,0.05); }
+.search-results-block {
+  margin: 0.75em 0; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+.search-results-header {
+  display: flex; align-items: center; gap: 6px; cursor: pointer;
+  font-size: 13px; color: var(--text-muted); padding: 8px 12px;
+  background: var(--bg-secondary); user-select: none; list-style: none;
+}
+.search-results-header::-webkit-details-marker { display: none; }
+.search-results-header::after {
+  content: ''; margin-left: auto;
+  border: 5px solid transparent; border-left: 6px solid var(--text-muted);
+  transition: transform 0.15s;
+}
+.search-results-block[open] > .search-results-header::after {
+  transform: rotate(90deg);
+}
+.search-results-header:hover { background: var(--tool-bg); }
+.search-results-list { display: flex; flex-direction: column; gap: 6px; padding: 8px; }
+.search-result-card {
+  display: block; padding: 10px 14px;
+  background: var(--search-card-bg); border: 1px solid var(--search-card-border);
+  border-radius: var(--radius-sm); text-decoration: none; transition: all 0.15s;
+}
+.search-result-card:hover { border-color: var(--accent); box-shadow: var(--shadow); }
+.result-title { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+.result-favicon { border-radius: 2px; flex-shrink: 0; }
+.result-url { font-size: 12px; color: var(--text-muted); }
+.result-age { margin-left: 8px; }
+.artifact-block {
+  border: 1px solid var(--artifact-border); border-radius: var(--radius);
+  margin: 0.75em 0; overflow: hidden;
+}
+.artifact-header {
+  padding: 10px 16px; background: var(--tool-bg);
+  display: flex; align-items: center; gap: 8px; font-size: 14px;
+}
+.artifact-title { font-weight: 600; }
+.artifact-lang { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+.artifact-tabs {
+  display: flex; border-bottom: 1px solid var(--border); background: var(--tool-bg);
+}
+.artifact-tab {
+  padding: 6px 16px; border: none; background: none; cursor: pointer;
+  font-size: 13px; color: var(--text-secondary); border-bottom: 2px solid transparent;
+}
+.artifact-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.artifact-content .code-block { margin: 0; border-radius: 0; }
+.artifact-preview-view iframe {
+  width: 100%; min-height: 300px; border: none; background: #fff;
+}
+.code-exec-result { margin: 0.5em 0; }
+.exec-label { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+.exec-output pre, .exec-return pre {
+  background: var(--code-bg); color: var(--code-text);
+  padding: 10px; border-radius: var(--radius-sm); font-size: 13px; overflow-x: auto;
+}
+.exec-error pre {
+  background: rgba(224,82,82,0.08); color: #e05252;
+  padding: 10px; border-radius: var(--radius-sm); font-size: 13px; overflow-x: auto;
+}
+.attachment {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 4px 10px; margin-bottom: 8px;
+  font-size: 13px; color: var(--text-secondary);
+}
+.message-image { max-width: 100%; border-radius: var(--radius); margin: 0.5em 0; }
+.unknown-block { color: var(--text-muted); font-style: italic; padding: 8px 0; }
+.uploaded-files-grid {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px;
+}
+.uploaded-file { flex-shrink: 0; }
+.uploaded-image { width: 120px; }
+.uploaded-image img {
+  width: 120px; height: 90px; object-fit: cover;
+  border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer;
+  transition: transform 0.15s;
+}
+.uploaded-image img:hover { transform: scale(1.05); }
+.uploaded-image img.expanded {
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: auto; height: auto; max-width: 90vw; max-height: 90vh;
+  object-fit: contain; z-index: 10001; border-radius: var(--radius);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+}
+.image-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6); z-index: 10000; cursor: pointer;
+}
+.uploaded-file-name { font-size: 11px; color: var(--text-muted); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.uploaded-doc {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); max-width: 200px;
+}
+.doc-thumbnail { width: 32px; border-radius: 2px; border: 1px solid var(--border); }
+.uploaded-file-info { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+.text-attachment {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  margin-bottom: 10px; overflow: hidden; max-width: 100%;
+}
+.text-attachment summary {
+  padding: 8px 12px; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--text-secondary);
+  background: var(--bg-secondary);
+}
+.text-attachment summary:hover { background: var(--tool-bg); }
+.att-size { font-weight: 400; color: var(--text-muted); }
+.text-attachment-content {
+  max-height: 400px; overflow-y: auto;
+  padding: 12px; font-size: 13px;
+}
+.text-attachment-content pre {
+  white-space: pre-wrap; word-wrap: break-word;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  font-size: 12px; line-height: 1.5; margin: 0;
+}
+.knowledge-block {
+  background: var(--search-card-bg); border: 1px solid var(--search-card-border);
+  border-radius: var(--radius-sm); margin: 4px 0; overflow: hidden;
+}
+.knowledge-summary {
+  padding: 8px 12px; cursor: pointer; user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: var(--text-secondary);
+}
+.knowledge-summary:hover { background: var(--bg-secondary); }
+.knowledge-content { padding: 0 12px 12px; font-size: 13px; color: var(--text-secondary); }
+.knowledge-ref {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; margin: 4px 0;
+  background: var(--search-card-bg); border: 1px solid var(--search-card-border);
+  border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary);
+}
+.search-query-block { background: var(--tool-bg); }
+.code-exec-block .code-block { margin: 0; border-radius: 0; }
+.minimap {
+  position: fixed; top: 80px; right: 16px; z-index: 99;
+  width: 140px; max-height: calc(100vh - 96px);
+  background: var(--bg-primary); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  display: none; flex-direction: column; overflow: hidden;
+}
+.minimap.visible { display: flex; }
+.minimap-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 6px 10px; font-size: 11px; font-weight: 600; color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+}
+.minimap-header button {
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  font-size: 16px; line-height: 1; padding: 0;
+}
+.minimap-header button:hover { color: var(--text-primary); }
+.minimap-track {
+  flex: 1; overflow: hidden; position: relative; cursor: pointer;
+  padding: 4px 8px;
+}
+.minimap-block {
+  width: 100%; margin: 2px 0; border-radius: 2px; min-height: 2px;
+  cursor: pointer; transition: opacity 0.1s;
+}
+.minimap-block:hover { opacity: 0.7; }
+.minimap-block.mm-human { background: var(--accent); height: 3px; }
+.minimap-block.mm-assistant { background: var(--text-muted); }
+.minimap-block.mm-thinking { background: #d4a84b; height: 2px; }
+.minimap-block.mm-tool { background: #6b9fd4; height: 2px; }
+.minimap-block.mm-search { background: #6bd49f; height: 2px; }
+.minimap-viewport {
+  position: absolute; left: 0; right: 0;
+  background: rgba(201,100,66,0.25); border: 2px solid var(--accent);
+  border-radius: 2px; pointer-events: none;
+  min-height: 24px; box-shadow: 0 0 0 1px rgba(0,0,0,0.15);
+}
+[data-theme="dark"] .minimap-viewport {
+  background: rgba(212,128,94,0.3); border-color: #e8915a;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.1);
+}
+@media (max-width: 640px) {
+  .conversation { padding: 16px 12px 60px; }
+  .message { gap: 12px; padding: 16px 0; }
+  .page-header { padding: 10px 12px; }
+}
+
+</style>
+</head>
+<body>
+<header class="page-header">
+  <div class="header-left">
+    <div class="claude-logo-header"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.1 2.96l-4.6 8-1.86-3.22L12.96 2.2a.78.78 0 0 1 1.36 0l1.78 .76zM17.9 17.04l-4.6-8 1.86-3.22 5.32 9.22a.78.78 0 0 1-.68 1.17l-1.9-.17zM6.1 17.04l4.6-8-1.86 3.22-5.32-9.22a.78.78 0 0 1 .68-1.17l1.9 .17zM12 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></div>
+    <div class="header-title">
+      <h1>Lorem ipsum origins and history</h1>
+      <div class="header-meta">claude-opus-4-5-20251101 &middot; 1/1/1970, 12:00:00 AM</div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button id="expand-all-btn" title="Expand/Collapse all thinking">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.5V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.5c2.9-1.2 5-4.1 5-7.5a8 8 0 0 0-8-8z"/></svg>
+    </button>
+    <button id="minimap-toggle" title="Toggle minimap">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+    </button>
+    <button id="theme-toggle" title="Toggle dark/light mode">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
+  </div>
+</header>
+<div id="minimap" class="minimap">
+  <div class="minimap-header">
+    <span>Map</span>
+    <button id="minimap-close" title="Close minimap">&times;</button>
+  </div>
+  <div class="minimap-track" id="minimap-track">
+    <div class="minimap-viewport" id="minimap-viewport"></div>
+  </div>
+</div>
+<main class="conversation">
+
+        <div class="message message-human">
+          <div class="message-avatar human-avatar">H</div>
+          <div class="message-body">
+            <div class="message-sender">You</div>
+            
+            
+            <div class="message-content"><div class="text-block"><p>Explain this history of Lorum Ipsum.</p></div></div>
+          </div>
+        </div>
+        <div class="message message-assistant">
+          <div class="message-avatar assistant-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.1 2.96l-4.6 8-1.86-3.22L12.96 2.2a.78.78 0 0 1 1.36 0l1.78 .76zM17.9 17.04l-4.6-8 1.86-3.22 5.32 9.22a.78.78 0 0 1-.68 1.17l-1.9-.17zM6.1 17.04l4.6-8-1.86 3.22-5.32-9.22a.78.78 0 0 1 .68-1.17l1.9 .17zM12 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></div>
+          <div class="message-body">
+            <div class="message-sender">Claude</div>
+            
+            
+            <div class="message-content"><div class="text-block"></div>
+
+      <details class="thinking-block">
+        <summary>
+          <svg class="thinking-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.5V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.5c2.9-1.2 5-4.1 5-7.5a8 8 0 0 0-8-8z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+          Thinking
+        </summary>
+        <div class="thinking-content"><p>The user is asking about the history of Lorem Ipsum. This is a well-known topic that I can answer from my training knowledge without needing to search. Let me provide a clear explanation.</p></div>
+      </details>
+<div class="text-block"><p>Lorem Ipsum has a surprisingly long and interesting history that stretches back to classical antiquity.</p>
+<p><strong>Origins in Ancient Rome</strong></p>
+<p>The text traces back to <strong>45 BC</strong>, to a work by the Roman statesman and philosopher <strong>Cicero</strong> called <em>De finibus bonorum et malorum</em> ("On the Ends of Good and Evil"). This was a treatise on ethics that explored theories of what is good and what is evil. The Lorem Ipsum text is a scrambled, altered excerpt from Section 1.10.32 of that work.</p>
+<p><strong>Medieval and Early Print Use</strong></p>
+<p>While its use in the intervening centuries is harder to trace, Lorem Ipsum became a standard in the <strong>printing industry during the 1500s</strong>. An unknown printer reportedly took a galley of type and scrambled it to make a type specimen book. The fact that it resembles Latin but is mostly nonsensical made it ideal as placeholder text — it has the visual rhythm and distribution of letters found in natural language without distracting readers with meaningful content.</p>
+<p><strong>Why It Works</strong></p>
+<p>The genius of Lorem Ipsum is that it has a roughly normal distribution of letters and word lengths, so a page filled with it looks like readable text. This makes it far more useful for design and typesetting mockups than simply repeating "content here" or using random characters.</p>
+<p><strong>Modern Revival</strong></p>
+<p>Lorem Ipsum saw a major resurgence in the <strong>1960s</strong> when <strong>Letraset</strong>, a company that made dry-transfer lettering sheets used by graphic designers, included Lorem Ipsum passages on its sheets. This spread it throughout the design world.</p>
+<p>Then in the <strong>1980s and 1990s</strong>, desktop publishing software like <strong>Aldus PageMaker</strong> bundled Lorem Ipsum as default placeholder text, cementing its status as the industry standard. Today, virtually every web design tool, word processor template, and prototyping application uses it.</p>
+<p><strong>A Common Misconception</strong></p>
+<p>Many people assume Lorem Ipsum is just random gibberish. While it <em>is</em> garbled and doesn't make coherent sense in Latin, much of it derives from real Latin words and phrases from Cicero's original text. A Latin scholar, <strong>Richard McClintock</strong> of Hampden-Sydney College in Virginia, is credited with tracing the text back to its Ciceronian source in the modern era, helping to dispel the myth that it was entirely meaningless.</p>
+<p>So in short, Lorem Ipsum went from a serious Roman philosophical treatise, to a printer's dummy text, to an icon of modern graphic and web design — a journey of over two thousand years.</p></div></div>
+          </div>
+        </div>
+        <div class="message message-human">
+          <div class="message-avatar human-avatar">H</div>
+          <div class="message-body">
+            <div class="message-sender">You</div>
+            
+            
+            <div class="message-content"><div class="text-block"><p>Create an example of Lorem Ipsum.</p></div></div>
+          </div>
+        </div>
+        <div class="message message-assistant">
+          <div class="message-avatar assistant-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.1 2.96l-4.6 8-1.86-3.22L12.96 2.2a.78.78 0 0 1 1.36 0l1.78 .76zM17.9 17.04l-4.6-8 1.86-3.22 5.32 9.22a.78.78 0 0 1-.68 1.17l-1.9-.17zM6.1 17.04l4.6-8-1.86 3.22-5.32-9.22a.78.78 0 0 1 .68-1.17l1.9 .17zM12 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></div>
+          <div class="message-body">
+            <div class="message-sender">Claude</div>
+            
+            
+            <div class="message-content"><div class="text-block"></div>
+
+      <details class="thinking-block">
+        <summary>
+          <svg class="thinking-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.5V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.5c2.9-1.2 5-4.1 5-7.5a8 8 0 0 0-8-8z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+          Thinking
+        </summary>
+        <div class="thinking-content"><p>The user wants me to create an example of Lorem Ipsum text. This is a straightforward request - I'll provide the classic Lorem Ipsum passage.</p></div>
+      </details>
+<div class="text-block"><p>Here's the classic Lorem Ipsum passage, followed by some additional generated placeholder text:</p>
+<hr>
+<p><strong>The Standard Lorem Ipsum Passage:</strong></p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<p><strong>Additional Paragraphs:</strong></p>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+<p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.</p>
+<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+<hr>
+<p>The first paragraph is the most widely recognized version. The additional paragraphs actually come closer to Cicero's original <em>De finibus bonorum et malorum</em> text and are commonly used when more placeholder content is needed.</p></div></div>
+          </div>
+        </div>
+        <div class="message message-human">
+          <div class="message-avatar human-avatar">H</div>
+          <div class="message-body">
+            <div class="message-sender">You</div>
+            
+            
+            <div class="message-content"><div class="text-block"><p>Proved a link to an online Loren Ipsum generator.</p></div></div>
+          </div>
+        </div>
+        <div class="message message-assistant">
+          <div class="message-avatar assistant-avatar"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.1 2.96l-4.6 8-1.86-3.22L12.96 2.2a.78.78 0 0 1 1.36 0l1.78 .76zM17.9 17.04l-4.6-8 1.86-3.22 5.32 9.22a.78.78 0 0 1-.68 1.17l-1.9-.17zM6.1 17.04l4.6-8-1.86 3.22-5.32-9.22a.78.78 0 0 1 .68-1.17l1.9 .17zM12 22a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg></div>
+          <div class="message-body">
+            <div class="message-sender">Claude</div>
+            
+            
+            <div class="message-content"><div class="text-block"></div>
+
+      <details class="thinking-block">
+        <summary>
+          <svg class="thinking-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.5V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.5c2.9-1.2 5-4.1 5-7.5a8 8 0 0 0-8-8z"/><line x1="10" y1="22" x2="14" y2="22"/></svg>
+          Thinking
+        </summary>
+        <div class="thinking-content"><p>The user is asking for a link to an online Lorem Ipsum generator. I know of a popular one - lipsum.com. Let me provide that.</p></div>
+      </details>
+<div class="text-block"><p>Here are a few popular online Lorem Ipsum generators:</p>
+<ol>
+<li><strong>lipsum.com</strong> — The classic, most well-known generator: <a href="https://www.lipsum.com" target="_blank" rel="noopener">https://www.lipsum.com</a></li>
+<li><strong>loremipsum.io</strong> — A clean, modern generator with options for paragraphs, words, or sentences: <a href="https://loremipsum.io" target="_blank" rel="noopener">https://loremipsum.io</a></li>
+<li><strong>blindtextgenerator.com</strong> — Offers Lorem Ipsum along with other placeholder text styles: <a href="https://www.blindtextgenerator.com" target="_blank" rel="noopener">https://www.blindtextgenerator.com</a></li>
+</ol>
+<p>The first one, <strong>lipsum.com</strong>, is the most popular and straightforward — you just choose how many paragraphs, words, bytes, or lists you want, and it generates the text for you instantly.</p></div></div>
+          </div>
+        </div>
+</main>
+<script>
+
+(function() {
+  // Theme toggle
+  const toggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+  const savedTheme = localStorage.getItem('claude-dl-theme');
+  if (savedTheme) html.setAttribute('data-theme', savedTheme);
+
+  toggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('claude-dl-theme', next);
+  });
+
+  // Expand/collapse all thinking
+  const expandBtn = document.getElementById('expand-all-btn');
+  let allExpanded = false;
+  expandBtn.addEventListener('click', () => {
+    allExpanded = !allExpanded;
+    document.querySelectorAll('.thinking-block').forEach(d => {
+      d.open = allExpanded;
+    });
+  });
+
+  // Copy buttons on code blocks
+  document.querySelectorAll('.code-block').forEach(block => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.addEventListener('click', () => {
+      const code = block.querySelector('code');
+      navigator.clipboard.writeText(code.textContent).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 1500);
+      });
+    });
+    block.appendChild(btn);
+  });
+
+  // Minimap
+  (function initMinimap() {
+    const minimap = document.getElementById('minimap');
+    const track = document.getElementById('minimap-track');
+    const viewport = document.getElementById('minimap-viewport');
+    const toggleBtn = document.getElementById('minimap-toggle');
+    const closeBtn = document.getElementById('minimap-close');
+
+    // Build minimap blocks from messages
+    const messages = document.querySelectorAll('.message');
+    messages.forEach((msg, i) => {
+      const isHuman = msg.classList.contains('message-human');
+      // Create a block for the message
+      const block = document.createElement('div');
+      block.className = 'minimap-block ' + (isHuman ? 'mm-human' : 'mm-assistant');
+
+      // Estimate height based on content
+      const contentEl = msg.querySelector('.message-content');
+      const textLen = contentEl ? contentEl.textContent.length : 50;
+      const h = Math.max(2, Math.min(20, Math.round(textLen / 80)));
+      block.style.height = h + 'px';
+
+      block.addEventListener('click', (e) => {
+        e.stopPropagation();
+        scrollToMessage(msg);
+      });
+      track.appendChild(block);
+
+      // Add sub-blocks for thinking/tools inside assistant messages
+      if (!isHuman) {
+        msg.querySelectorAll('.thinking-block').forEach(() => {
+          const tb = document.createElement('div');
+          tb.className = 'minimap-block mm-thinking';
+          tb.addEventListener('click', (e) => { e.stopPropagation(); scrollToMessage(msg); });
+          track.appendChild(tb);
+        });
+        msg.querySelectorAll('.search-query-block, .search-results-block').forEach(() => {
+          const sb = document.createElement('div');
+          sb.className = 'minimap-block mm-search';
+          sb.addEventListener('click', (e) => { e.stopPropagation(); scrollToMessage(msg); });
+          track.appendChild(sb);
+        });
+        msg.querySelectorAll('.tool-block:not(.search-query-block)').forEach(() => {
+          const tb = document.createElement('div');
+          tb.className = 'minimap-block mm-tool';
+          tb.addEventListener('click', (e) => { e.stopPropagation(); scrollToMessage(msg); });
+          track.appendChild(tb);
+        });
+      }
+    });
+
+    function scrollToMessage(el) {
+      const headerH = 56;
+      const y = el.getBoundingClientRect().top + window.scrollY - headerH - 10;
+      window.scrollTo({ top: y, behavior: 'instant' });
+      requestAnimationFrame(updateViewport);
+    }
+
+    // Update viewport indicator on scroll
+    function updateViewport() {
+      const docH = document.documentElement.scrollHeight;
+      const winH = window.innerHeight;
+      const scrollY = window.scrollY;
+      const trackClientH = track.clientHeight;
+
+      const ratio = trackClientH / docH;
+      const vpH = Math.max(8, winH * ratio);
+      const vpTop = scrollY * ratio;
+
+      viewport.style.top = vpTop + 'px';
+      viewport.style.height = vpH + 'px';
+    }
+
+    window.addEventListener('scroll', updateViewport, { passive: true });
+    window.addEventListener('resize', updateViewport);
+    updateViewport();
+
+    // Click and drag on minimap track to scroll
+    let dragging = false;
+    let dragOffset = 0;
+
+    function scrollFromTrackY(clientY) {
+      const rect = track.getBoundingClientRect();
+      const ratio = (clientY - rect.top - dragOffset) / rect.height;
+      const targetScroll = ratio * document.documentElement.scrollHeight;
+      window.scrollTo({ top: Math.max(0, targetScroll), behavior: 'instant' });
+      requestAnimationFrame(updateViewport);
+    }
+
+    track.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const vpRect = viewport.getBoundingClientRect();
+      if (e.clientY >= vpRect.top && e.clientY <= vpRect.bottom) {
+        // Clicked inside viewport - drag relative to click position
+        dragOffset = e.clientY - vpRect.top;
+      } else {
+        // Clicked outside viewport - jump and center viewport
+        dragOffset = viewport.offsetHeight / 2;
+        scrollFromTrackY(e.clientY);
+      }
+      dragging = true;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      e.preventDefault();
+      scrollFromTrackY(e.clientY);
+    });
+
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+    });
+
+    // Toggle minimap
+    toggleBtn.addEventListener('click', () => {
+      minimap.classList.toggle('visible');
+      updateViewport();
+    });
+    closeBtn.addEventListener('click', () => {
+      minimap.classList.remove('visible');
+    });
+  })();
+
+  // Image lightbox (click thumbnail to expand)
+  document.querySelectorAll('.uploaded-image img').forEach(img => {
+    img.addEventListener('click', () => {
+      if (img.classList.contains('expanded')) {
+        img.classList.remove('expanded');
+        const overlay = document.querySelector('.image-overlay');
+        if (overlay) overlay.remove();
+        return;
+      }
+      const overlay = document.createElement('div');
+      overlay.className = 'image-overlay';
+      overlay.addEventListener('click', () => {
+        img.classList.remove('expanded');
+        overlay.remove();
+      });
+      document.body.appendChild(overlay);
+      img.classList.add('expanded');
+    });
+  });
+
+  // Artifact tab switching
+  document.querySelectorAll('.artifact-tabs').forEach(tabs => {
+    const artifact = tabs.closest('.artifact-block');
+    tabs.querySelectorAll('.artifact-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.querySelectorAll('.artifact-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        if (target === 'code') {
+          artifact.querySelector('.artifact-code-view').style.display = '';
+          const preview = artifact.querySelector('.artifact-preview-view');
+          if (preview) preview.style.display = 'none';
+        } else {
+          artifact.querySelector('.artifact-code-view').style.display = 'none';
+          const preview = artifact.querySelector('.artifact-preview-view');
+          if (preview) preview.style.display = '';
+        }
+      });
+    });
+  });
+})();
+
+</script>
+</body>
+</html>
