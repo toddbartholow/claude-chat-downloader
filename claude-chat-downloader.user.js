@@ -738,8 +738,7 @@ ${getCSS()}
   </div>
 </header>
 <div id="minimap" class="minimap">
-  <div class="minimap-header">
-    <span>Map</span>
+  <div class="minimap-header">   
     <button id="minimap-close" title="Close minimap">&times;</button>
   </div>
   <div class="minimap-track" id="minimap-track">
